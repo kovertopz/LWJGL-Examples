@@ -16,6 +16,9 @@ import org.lwjgl.opengl.PixelFormat;
 /**
  * Example from: http://lwjgl.org/wiki/index.php?title=The_Quad_with_DrawElements
  *
+ * This example will create a window with an OpenGL 3.2 context. We will create a Vertex Array Object which contains a
+ * quad. We will then render the quad using glDrawElements.
+ *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
 public class TheQuadExampleDrawElements {

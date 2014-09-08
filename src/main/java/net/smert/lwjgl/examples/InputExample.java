@@ -9,7 +9,7 @@ import org.lwjgl.opengl.DisplayMode;
 /**
  * Example from: http://lwjgl.org/wiki/index.php?title=LWJGL_Basics_2_(Input)
  *
- * This demo will show key presses for "A", "S", "D" and space along with left mouse clicks.
+ * This example will show key presses for "A", "S", "D" and space along with left mouse clicks.
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */

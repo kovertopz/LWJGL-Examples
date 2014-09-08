@@ -20,6 +20,10 @@ import org.lwjgl.util.glu.GLU;
 /**
  * Example from: http://lwjgl.org/wiki/index.php?title=The_Quad_interleaved
  *
+ * This example will create a window with an OpenGL 3.2 context. We will create a Vertex Array Object which contains a
+ * quad with color information. There is only a single VBO with the vertex data and color information interleaved. We
+ * will then render the quad using a shader. The quad will have a different color for each vertex.
+ *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
 public class TheQuadExampleInterleaved {

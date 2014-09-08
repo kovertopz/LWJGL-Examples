@@ -10,6 +10,8 @@ import org.lwjgl.opengl.GL11;
 /**
  * Example from: http://lwjgl.org/wiki/index.php?title=LWJGL_Basics_4_(Timing)
  *
+ * This example will open a window with a rotating quad. You can move the quad around the screen.
+ *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
 public class TimerExample {

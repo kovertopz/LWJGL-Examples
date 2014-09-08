@@ -25,6 +25,10 @@ import org.lwjgl.util.glu.GLU;
 /**
  * Example from: http://lwjgl.org/wiki/index.php?title=The_Quad_textured
  *
+ * This example will create a window with an OpenGL 3.2 context. We will create a Vertex Array Object which contains a
+ * quad with color information and UV coordinates. We will then render the quad using a shader. The quad will be
+ * textured. We load the textures using PNGDecoder.
+ *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
 public class TheQuadExampleTextured {

@@ -10,7 +10,7 @@ import org.lwjgl.opengl.GL11;
 /**
  * Example from: http://lwjgl.org/wiki/index.php?title=LWJGL_Basics_5_(Fullscreen)
  *
- * This demo will open a window with a rotating quad. You can move the quad around the screen or turn on
+ * This example will open a window with a rotating quad. You can move the quad around the screen or turn on
  * fullscreen/vsync.
  *
  * @author Jason Sorensen <sorensenj@smert.net>

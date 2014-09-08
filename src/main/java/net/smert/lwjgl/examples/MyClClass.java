@@ -22,6 +22,9 @@ import org.lwjgl.opencl.CLProgram;
 import org.lwjgl.opencl.Util;
 
 /**
+ * Example from: http://lwjgl.org/wiki/index.php?title=OpenCL_in_LWJGL
+ *
+ * This example will open an OpenCL context, add up some numbers and display the results on the console.
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */

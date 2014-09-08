@@ -8,6 +8,8 @@ import org.lwjgl.opengl.GL11;
 /**
  * Example from: http://lwjgl.org/wiki/index.php?title=LWJGL_Basics_3_(The_Quad)
  *
+ * This example will create a window and render a quad.
+ *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
 public class QuadExample {

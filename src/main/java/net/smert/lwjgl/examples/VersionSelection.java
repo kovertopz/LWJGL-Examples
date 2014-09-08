@@ -10,6 +10,9 @@ import org.lwjgl.opengl.PixelFormat;
 /**
  * Example from: http://lwjgl.org/wiki/index.php?title=Version_selection
  *
+ * This example will create a window with a OpenGL 3.2 context by default and display the OpengGL version in the
+ * console.
+ *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
 public class VersionSelection {

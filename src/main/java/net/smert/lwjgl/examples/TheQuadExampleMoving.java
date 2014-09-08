@@ -27,6 +27,10 @@ import org.lwjgl.util.vector.Vector3f;
 /**
  * Example from: http://lwjgl.org/wiki/index.php?title=The_Quad_with_Projection,_View_and_Model_matrices
  *
+ * This example will create a window with an OpenGL 3.2 context. We will create a Vertex Array Object which contains a
+ * quad with color information and UV coordinates. We will then render the quad using a shader. The quad will be
+ * textured. We load the textures using PNGDecoder. We can zoom, rotate and move the quad using the keyboard.
+ *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
 public class TheQuadExampleMoving {
