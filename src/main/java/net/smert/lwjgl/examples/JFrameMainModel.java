@@ -1,6 +1,8 @@
 package net.smert.lwjgl.examples;
 
 import com.jdotsoft.jarloader.JarClassLoader;
+import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -32,15 +34,33 @@ public class JFrameMainModel {
         listModelMainClasses = new DefaultListModel();
     }
 
-    private String getFileExtension(String filename) {
-        int index = filename.lastIndexOf('.');
-        String extension = "";
+    private boolean checkMainMethodExists(String filenameWithoutExtension) {
+        boolean result = false;
 
-        if (index > 0) {
-            extension = filename.substring(index + 1);
+        try {
+            Class clazz = jarClassLoader.loadClass(PACKAGE_PREFIX + filenameWithoutExtension);
+            Method method = clazz.getMethod("main", new Class[]{String[].class});
+
+            boolean validModifiers = false;
+            boolean validVoid = false;
+
+            if (method != null) {
+                method.setAccessible(true);
+                int nModifiers = method.getModifiers();
+                validModifiers = Modifier.isPublic(nModifiers) && Modifier.isStatic(nModifiers);
+                Class<?> clazzRet = method.getReturnType();
+                validVoid = (clazzRet == void.class);
+            }
+            if (validModifiers && validVoid) {
+                result = true;
+            }
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException | SecurityException e) {
+            // Do nothing since not all classes have main methods.
         }
 
-        return extension;
+        return result;
     }
 
     private String getFileNameWithoutExtension(String filename) {
@@ -55,8 +75,50 @@ public class JFrameMainModel {
     }
 
     private List<String> getMainClasses() {
-        CodeSource src = Main.class.getProtectionDomain().getCodeSource();
         List<String> mainClasses = new ArrayList();
+        URL classLocation = JFrameMainModel.class.getResource(JFrameMainModel.class.getSimpleName() + ".class");
+        String protocol = classLocation.getProtocol();
+
+        switch (protocol) {
+            case "file":
+                getMainClassesFromFile(mainClasses, classLocation.getPath());
+                break;
+
+            case "jar":
+                getMainClassesFromJar(mainClasses);
+                break;
+
+            default:
+                throw new RuntimeException("Unknown protocol for current class: " + protocol);
+        }
+
+        return mainClasses;
+    }
+
+    private void getMainClassesFromFile(List<String> mainClasses, String pathThisClass) {
+        File fileThisClass = new File(pathThisClass);
+        String directory = fileThisClass.getParent();
+
+        File dir = new File(directory);
+
+        File[] files = dir.listFiles(new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+                return name.endsWith(".class") && !name.contains("$") && !name.startsWith("Main");
+            }
+        });
+
+        for (File javaClass : files) {
+            String filenameWithoutExtension = javaClass.getName().replace(".class", "");
+
+            if (checkMainMethodExists(filenameWithoutExtension) == true) {
+                mainClasses.add(PACKAGE_PREFIX + filenameWithoutExtension);
+            }
+        }
+    }
+
+    private void getMainClassesFromJar(List<String> mainClasses) {
+        CodeSource src = Main.class.getProtectionDomain().getCodeSource();
 
         if (src != null) {
             URL jar = src.getLocation();
@@ -74,13 +136,7 @@ public class JFrameMainModel {
 
                     String fullpath = e.getName();
 
-                    if (fullpath.startsWith(DIRECTORY_PREFIX)) {
-                        String extension = getFileExtension(fullpath);
-
-                        if (!extension.startsWith("class")) {
-                            continue;
-                        }
-
+                    if (fullpath.startsWith(DIRECTORY_PREFIX) && fullpath.endsWith(".class")) {
                         Path path = Paths.get(fullpath);
                         String filename = path.getFileName().toString();
 
@@ -88,35 +144,14 @@ public class JFrameMainModel {
                             continue;
                         }
 
-                        String filenameWithoutExtension = getFileNameWithoutExtension(filename);
-
-                        if (filenameWithoutExtension.equals(Main.class.getSimpleName())) {
+                        if (filename.equals(Main.class.getSimpleName() + ".class")) {
                             continue;
                         }
 
-                        try {
-                            Class clazz = jarClassLoader.loadClass(PACKAGE_PREFIX + filenameWithoutExtension);
-                            Method method = clazz.getMethod("main", new Class[]{String[].class});
+                        String filenameWithoutExtension = getFileNameWithoutExtension(filename);
 
-                            boolean validModifiers = false;
-                            boolean validVoid = false;
-
-                            if (method != null) {
-                                method.setAccessible(true);
-                                int nModifiers = method.getModifiers();
-                                validModifiers = Modifier.isPublic(nModifiers) && Modifier.isStatic(nModifiers);
-                                Class<?> clazzRet = method.getReturnType();
-                                validVoid = (clazzRet == void.class);
-                            }
-                            if (method == null || !validModifiers || !validVoid) {
-                                continue;
-                            }
-
+                        if (checkMainMethodExists(filenameWithoutExtension) == true) {
                             mainClasses.add(PACKAGE_PREFIX + filenameWithoutExtension);
-                        } catch (ClassNotFoundException cnfe) {
-                            cnfe.printStackTrace();
-                        } catch (NoSuchMethodException | SecurityException ex) {
-                            // Do nothing since not all classes have main methods.
                         }
                     }
                 }
@@ -124,8 +159,6 @@ public class JFrameMainModel {
                 ie.printStackTrace();
             }
         }
-
-        return mainClasses;
     }
 
     public AbstractListModel populateListModel() {
