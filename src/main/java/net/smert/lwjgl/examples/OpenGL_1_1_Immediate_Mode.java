@@ -141,6 +141,8 @@ public class OpenGL_1_1_Immediate_Mode {
             Display.update();
             Display.sync(3000);
         }
+
+        Display.destroy();
     }
 
     private float getDelta() {

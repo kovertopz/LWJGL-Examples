@@ -163,6 +163,8 @@ public class OpenGL_1_1_Vertex_Arrays {
             Display.update();
             Display.sync(3000);
         }
+
+        Display.destroy();
     }
 
     private void createVertexArrayCubeWithTriangles(FloatBuffer colorFloatBuffer, FloatBuffer vertexFloatBuffer) {

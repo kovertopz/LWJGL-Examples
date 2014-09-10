@@ -148,6 +148,8 @@ public class OpenGL_1_1_Display_Lists {
             Display.update();
             Display.sync(3000);
         }
+
+        Display.destroy();
     }
 
     private void createListCubeWithTriangles() {

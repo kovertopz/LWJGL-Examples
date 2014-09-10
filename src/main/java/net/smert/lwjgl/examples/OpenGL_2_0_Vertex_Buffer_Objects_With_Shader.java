@@ -142,8 +142,6 @@ public class OpenGL_2_0_Vertex_Buffer_Objects_With_Shader {
             System.err.println(GL20.glGetShaderInfoLog(pId, 8192));
             throw new RuntimeException("Shader had validate errors!");
         }
-
-        System.out.println(GL20.glGetAttribLocation(pId, "gl_Vertex"));
     }
 
     public int loadShader(String filename, int type) {
@@ -222,6 +220,8 @@ public class OpenGL_2_0_Vertex_Buffer_Objects_With_Shader {
             Display.update();
             Display.sync(3000);
         }
+
+        Display.destroy();
     }
 
     private void createVBOCubeWithTriangles() {

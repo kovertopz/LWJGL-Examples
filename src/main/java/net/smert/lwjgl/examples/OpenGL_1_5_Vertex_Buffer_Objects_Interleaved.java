@@ -150,6 +150,8 @@ public class OpenGL_1_5_Vertex_Buffer_Objects_Interleaved {
             Display.update();
             Display.sync(3000);
         }
+
+        Display.destroy();
     }
 
     private void createVBOCubeWithTriangles() {
