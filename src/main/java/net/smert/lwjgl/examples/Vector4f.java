@@ -6,22 +6,29 @@ import java.nio.FloatBuffer;
  *
  * @author Jason Sorensen <sorensenj@smert.net>
  */
-public class Vector3f {
+public class Vector4f {
 
+    private float w;
     private float x;
     private float y;
     private float z;
 
-    public Vector3f() {
+    public Vector4f() {
+        w = 0.0f;
         x = 0.0f;
         y = 0.0f;
         z = 0.0f;
     }
 
-    public Vector3f(float x, float y, float z) {
+    public Vector4f(float x, float y, float z, float w) {
+        this.w = w;
         this.x = x;
         this.y = y;
         this.z = z;
+    }
+
+    public float getW() {
+        return w;
     }
 
     public float getX() {
@@ -36,10 +43,15 @@ public class Vector3f {
         return z;
     }
 
-    public void set(float x, float y, float z) {
+    public void set(float x, float y, float z, float w) {
+        this.w = w;
         this.x = x;
         this.y = y;
         this.z = z;
+    }
+
+    public void setW(float w) {
+        this.w = w;
     }
 
     public void setX(float x) {
@@ -58,6 +70,7 @@ public class Vector3f {
         fb.put(x);
         fb.put(y);
         fb.put(z);
+        fb.put(w);
     }
 
     @Override
