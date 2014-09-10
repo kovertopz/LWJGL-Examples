@@ -26,7 +26,7 @@ public class OpenGL_2_0_Vertex_Buffer_Objects_With_Shader {
 
     private final static float MOUSE_POLL = 1.0f / 125.0f;
     private final static float PI_OVER_180 = (float) Math.PI / 180.0f;
-    private final static String WINDOW_TITLE = "OpenGL 2.0 Vertex Buffer Objects";
+    private final static String WINDOW_TITLE = "OpenGL 2.0 Vertex Buffer Objects With Shader";
 
     private boolean exampleRunning;
     private int fps;
