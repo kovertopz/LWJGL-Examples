@@ -24,7 +24,6 @@ import javax.swing.DefaultListModel;
 public class JFrameMainModel {
 
     private final static String DIRECTORY_PREFIX = "net/smert/lwjgl/examples/";
-    private final static String PACKAGE_PREFIX = "net.smert.lwjgl.examples.";
 
     private final DefaultListModel listModelMainClasses;
     private final JarClassLoader jarClassLoader;
@@ -34,11 +33,11 @@ public class JFrameMainModel {
         listModelMainClasses = new DefaultListModel();
     }
 
-    private boolean checkMainMethodExists(String filenameWithoutExtension) {
+    private boolean checkMainMethodExists(String clazzName) {
         boolean result = false;
 
         try {
-            Class clazz = jarClassLoader.loadClass(PACKAGE_PREFIX + filenameWithoutExtension);
+            Class clazz = jarClassLoader.loadClass(clazzName);
             Method method = clazz.getMethod("main", new Class[]{String[].class});
 
             boolean validModifiers = false;
@@ -63,15 +62,28 @@ public class JFrameMainModel {
         return result;
     }
 
-    private String getFileNameWithoutExtension(String filename) {
-        int index = filename.lastIndexOf('.');
-        String name = "";
+    private void filterFileAndCheck(File file, List<String> mainClasses) {
+        String filename = file.getName();
 
-        if (index > 0) {
-            name = filename.substring(0, index);
+        if (filename.endsWith(".class") && !filename.contains("$") && !filename.startsWith("Main")) {
+            String clazzName = getClassNameFromPath(file.getAbsolutePath(), File.separator);
+
+            if ((clazzName.length() != 0) && (checkMainMethodExists(clazzName) == true)) {
+                mainClasses.add(clazzName);
+            }
+        }
+    }
+
+    private String getClassNameFromPath(String fullPath, String separator) {
+        String clazzName = "";
+        String directoryPrefix = DIRECTORY_PREFIX.replace("/", separator);
+        int index = fullPath.indexOf(directoryPrefix);
+
+        if (index != -1) {
+            clazzName = fullPath.substring(index).replaceFirst(".class$", "").replace(separator, ".");
         }
 
-        return name;
+        return clazzName;
     }
 
     private List<String> getMainClasses() {
@@ -97,24 +109,8 @@ public class JFrameMainModel {
 
     private void getMainClassesFromFile(List<String> mainClasses, String pathThisClass) {
         File fileThisClass = new File(pathThisClass);
-        String directory = fileThisClass.getParent();
-
-        File dir = new File(directory);
-
-        File[] files = dir.listFiles(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                return name.endsWith(".class") && !name.contains("$") && !name.startsWith("Main");
-            }
-        });
-
-        for (File javaClass : files) {
-            String filenameWithoutExtension = javaClass.getName().replace(".class", "");
-
-            if (checkMainMethodExists(filenameWithoutExtension) == true) {
-                mainClasses.add(PACKAGE_PREFIX + filenameWithoutExtension);
-            }
-        }
+        String directoryPath = fileThisClass.getParent();
+        listFilesInDirectory(directoryPath, mainClasses);
     }
 
     private void getMainClassesFromJar(List<String> mainClasses) {
@@ -136,7 +132,7 @@ public class JFrameMainModel {
 
                     String fullpath = e.getName();
 
-                    if (fullpath.startsWith(DIRECTORY_PREFIX) && fullpath.endsWith(".class")) {
+                    if (fullpath.endsWith(".class")) {
                         Path path = Paths.get(fullpath);
                         String filename = path.getFileName().toString();
 
@@ -148,15 +144,28 @@ public class JFrameMainModel {
                             continue;
                         }
 
-                        String filenameWithoutExtension = getFileNameWithoutExtension(filename);
+                        String clazzName = getClassNameFromPath(fullpath, "/");
 
-                        if (checkMainMethodExists(filenameWithoutExtension) == true) {
-                            mainClasses.add(PACKAGE_PREFIX + filenameWithoutExtension);
+                        if ((clazzName.length() != 0) && (checkMainMethodExists(clazzName) == true)) {
+                            mainClasses.add(clazzName);
                         }
                     }
                 }
             } catch (IOException ie) {
                 ie.printStackTrace();
+            }
+        }
+    }
+
+    private void listFilesInDirectory(String directoryPath, List<String> mainClasses) {
+        File directory = new File(directoryPath);
+        File[] files = directory.listFiles();
+
+        for (File file : files) {
+            if (file.isDirectory()) {
+                listFilesInDirectory(file.getPath(), mainClasses);
+            } else {
+                filterFileAndCheck(file, mainClasses);
             }
         }
     }
