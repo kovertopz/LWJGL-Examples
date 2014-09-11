@@ -8,10 +8,10 @@ import java.nio.FloatBuffer;
  */
 public class Vector4f {
 
-    private float w;
-    private float x;
-    private float y;
-    private float z;
+    float w;
+    float x;
+    float y;
+    float z;
 
     public Vector4f() {
         w = 0.0f;
