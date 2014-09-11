@@ -540,11 +540,11 @@ public class OpenGL_1_5_Vertex_Buffer_Objects_Interleaved {
         GL11.glTranslatef(x, y, z);
 
         GL11.glEnableClientState(GL11.GL_COLOR_ARRAY);
-        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboColorAndVertex);
-        GL11.glColorPointer(4, GL11.GL_FLOAT, 28, 0);
-
         GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
+
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboColorAndVertex);
+
+        GL11.glColorPointer(4, GL11.GL_FLOAT, 28, 0);
         GL11.glVertexPointer(3, GL11.GL_FLOAT, 28, 16);
 
         GL11.glDrawArrays(GL11.GL_QUADS, 0, 24);
@@ -563,11 +563,11 @@ public class OpenGL_1_5_Vertex_Buffer_Objects_Interleaved {
         GL11.glTranslatef(x, y, z);
 
         GL11.glEnableClientState(GL11.GL_COLOR_ARRAY);
-        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboColorAndVertex);
-        GL11.glColorPointer(4, GL11.GL_FLOAT, 28, 0);
-
         GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
+
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboColorAndVertex);
+
+        GL11.glColorPointer(4, GL11.GL_FLOAT, 28, 0);
         GL11.glVertexPointer(3, GL11.GL_FLOAT, 28, 16);
 
         GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, 36);
