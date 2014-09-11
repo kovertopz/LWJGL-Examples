@@ -210,6 +210,7 @@ public class OpenGL_3_0_Vertex_Buffer_Objects_Compatibility_Mode {
             Display.sync(3000);
         }
 
+        Mouse.setGrabbed(false);
         Display.destroy();
     }
 

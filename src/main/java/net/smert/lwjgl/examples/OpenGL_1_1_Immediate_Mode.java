@@ -142,6 +142,7 @@ public class OpenGL_1_1_Immediate_Mode {
             Display.sync(3000);
         }
 
+        Mouse.setGrabbed(false);
         Display.destroy();
     }
 

@@ -149,6 +149,7 @@ public class OpenGL_1_1_Display_Lists {
             Display.sync(3000);
         }
 
+        Mouse.setGrabbed(false);
         Display.destroy();
     }
 

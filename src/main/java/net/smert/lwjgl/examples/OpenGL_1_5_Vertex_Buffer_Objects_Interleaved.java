@@ -151,6 +151,7 @@ public class OpenGL_1_5_Vertex_Buffer_Objects_Interleaved {
             Display.sync(3000);
         }
 
+        Mouse.setGrabbed(false);
         Display.destroy();
     }
 

@@ -232,6 +232,7 @@ public class OpenGL_3_0_Vertex_Array_Objects {
             Display.sync(3000);
         }
 
+        Mouse.setGrabbed(false);
         Display.destroy();
     }
 

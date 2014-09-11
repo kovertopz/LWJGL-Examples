@@ -208,6 +208,7 @@ public class OpenGL_2_0_Vertex_Buffer_Objects_With_Shader_New_Camera {
             Display.sync(3000);
         }
 
+        Mouse.setGrabbed(false);
         Display.destroy();
     }
 

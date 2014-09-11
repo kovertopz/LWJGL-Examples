@@ -164,6 +164,7 @@ public class OpenGL_1_1_Vertex_Arrays {
             Display.sync(3000);
         }
 
+        Mouse.setGrabbed(false);
         Display.destroy();
     }
 
