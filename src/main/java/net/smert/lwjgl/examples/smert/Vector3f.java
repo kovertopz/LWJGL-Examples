@@ -108,7 +108,7 @@ public class Vector3f {
     public Vector3f invert() {
         x = -x;
         y = -y;
-        x = -z;
+        z = -z;
         return this;
     }
 
