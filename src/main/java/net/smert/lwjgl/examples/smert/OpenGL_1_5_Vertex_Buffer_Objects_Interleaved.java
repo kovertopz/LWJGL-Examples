@@ -489,16 +489,16 @@ public class OpenGL_1_5_Vertex_Buffer_Objects_Interleaved {
         float yRotationDelta = 0.0f;
 
         if (Keyboard.isKeyDown(Keyboard.KEY_DOWN) == true) {
-            xRotationDelta += 5.0f;
-        }
-        if (Keyboard.isKeyDown(Keyboard.KEY_UP) == true) {
             xRotationDelta -= 5.0f;
         }
+        if (Keyboard.isKeyDown(Keyboard.KEY_UP) == true) {
+            xRotationDelta += 5.0f;
+        }
         if (Keyboard.isKeyDown(Keyboard.KEY_LEFT) == true) {
-            yRotationDelta += 5.0f;
+            yRotationDelta -= 5.0f;
         }
         if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT) == true) {
-            yRotationDelta -= 5.0f;
+            yRotationDelta += 5.0f;
         }
 
         xRotationDelta += Mouse.getDY();
