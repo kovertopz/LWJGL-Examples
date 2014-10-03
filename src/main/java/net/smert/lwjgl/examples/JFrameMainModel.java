@@ -1,6 +1,5 @@
 package net.smert.lwjgl.examples;
 
-import com.jdotsoft.jarloader.JarClassLoader;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -24,11 +23,11 @@ public class JFrameMainModel {
 
     private final static String DIRECTORY_PREFIX = "net/smert/lwjgl/examples/";
 
+    private final CustomClassLoader customClassLoader;
     private final DefaultListModel listModelMainClasses;
-    private final JarClassLoader jarClassLoader;
 
     public JFrameMainModel() {
-        jarClassLoader = new JarClassLoader();
+        customClassLoader = new CustomClassLoader();
         listModelMainClasses = new DefaultListModel();
     }
 
@@ -36,26 +35,19 @@ public class JFrameMainModel {
         boolean result = false;
 
         try {
-            Class clazz = jarClassLoader.loadClass(clazzName);
-            Method method = clazz.getMethod("main", new Class[]{String[].class});
-
-            boolean validModifiers = false;
-            boolean validVoid = false;
-
-            if (method != null) {
-                method.setAccessible(true);
-                int nModifiers = method.getModifiers();
-                validModifiers = Modifier.isPublic(nModifiers) && Modifier.isStatic(nModifiers);
-                Class<?> clazzRet = method.getReturnType();
-                validVoid = (clazzRet == void.class);
-            }
-            if (validModifiers && validVoid) {
+            Class clazz = customClassLoader.loadClass(clazzName);
+            Method mainMethod = clazz.getMethod("main", String[].class);
+            mainMethod.setAccessible(true);
+            int mods = mainMethod.getModifiers();
+            Class returnType = mainMethod.getReturnType();
+            // Is method a public static void?
+            if (Modifier.isPublic(mods) && Modifier.isStatic(mods) && (returnType == void.class)) {
                 result = true;
             }
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException | SecurityException e) {
             e.printStackTrace();
-        } catch (NoSuchMethodException | SecurityException e) {
-            // Do nothing since not all classes have main methods.
+        } catch (NoSuchMethodException e) {
+            // Do nothing. Not all classes have a main method.
         }
 
         return result;
@@ -181,7 +173,9 @@ public class JFrameMainModel {
 
     public void runDemo(String mainClass, String[] args) {
         try {
-            jarClassLoader.invokeMain(mainClass, args);
+            Class clazz = customClassLoader.loadClass(mainClass, false);
+            Method mainMethod = clazz.getMethod("main", String[].class);
+            mainMethod.invoke(null, (Object) args);
         } catch (Throwable e) {
             e.printStackTrace();
             System.exit(-1);
